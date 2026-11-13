@@ -1,0 +1,419 @@
+{
+  "resultados": [
+    {
+      "id": "T1",
+      "nome": "Conexão",
+      "esperado": "Ana e Bia recebem CONECTADO|nome",
+      "obtido": "CONECTADO|Ana / CONECTADO|Bia",
+      "passou": true,
+      "obs": ""
+    },
+    {
+      "id": "T2",
+      "nome": "Nome repetido / vazio",
+      "esperado": "CONECTAR|ana -> ERRO|NOME_EM_USO; CONECTAR| -> ERRO|NOME_INVALIDO",
+      "obtido": "CONECTAR|ana -> ERRO|NOME_EM_USO|Ja existe um cliente conectado com este nome; CONECTAR| -> ERRO|NAO_CONECTADO|Envie CONECTAR|nome antes dos comandos; CONECTAR|  -> ERRO|NOME_INVALIDO|Nome vazio ou com o caractere |",
+      "passou": false,
+      "obs": "CONECTAR| (vazio) não devolveu NOME_INVALIDO"
+    },
+    {
+      "id": "T3",
+      "nome": "Sem identificação",
+      "esperado": "ERRO|NAO_CONECTADO|...",
+      "obtido": "ERRO|NAO_CONECTADO|Envie CONECTAR|nome antes dos comandos",
+      "passou": true,
+      "obs": ""
+    },
+    {
+      "id": "T4",
+      "nome": "Catálogo",
+      "esperado": "7 CATALOGO_ITEM disponíveis (25/12/25/12/25/12/20) + FIM_CATALOGO",
+      "obtido": "7 itens, disponivel=1111111, quantidades=[25, 12, 25, 12, 25, 12, 20], FIM_CATALOGO=True",
+      "passou": true,
+      "obs": ""
+    },
+    {
+      "id": "T5",
+      "nome": "Pedido aceito",
+      "esperado": "PEDIDO_CRIADO|1|AGUARDANDO|5; Ana e Bia recebem CATALOGO_ATUALIZADO com item0=11 e item1=5",
+      "obtido": "PEDIDO_CRIADO|1|AGUARDANDO|5; quantidades no CATALOGO_ATUALIZADO: Ana=[11, 5, 25, 12, 25, 12, 20], Bia=[11, 5, 25, 12, 25, 12, 20]",
+      "passou": true,
+      "obs": "ordem das primeiras mensagens da Ana após o pedido: PEDIDO_CRIADO, CATALOGO_ATUALIZADO, CATALOGO_ITEM"
+    },
+    {
+      "id": "T6",
+      "nome": "Estoque compartilhado",
+      "esperado": "Bia: ERRO|SEM_ESTOQUE|...",
+      "obtido": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido (0 ms após o pedido da Ana)",
+      "passou": true,
+      "obs": ""
+    },
+    {
+      "id": "T7",
+      "nome": "Notificações",
+      "esperado": "EVENTO_STATUS|1|EM_PREPARACAO e ~5 s depois EVENTO_STATUS|1|CONCLUIDO",
+      "obtido": "EVENTO_STATUS|1|EM_PREPARACAO / EVENTO_STATUS|1|CONCLUIDO; intervalo 4.959 s",
+      "passou": true,
+      "obs": ""
+    },
+    {
+      "id": "T8",
+      "nome": "Consulta",
+      "esperado": "Ana: STATUS_PEDIDO|1|CONCLUIDO|5; Bia: ERRO|PEDIDO_NAO_ENCONTRADO",
+      "obtido": "Ana: STATUS_PEDIDO|1|CONCLUIDO|5; Bia: ERRO|PEDIDO_NAO_ENCONTRADO|Pedido nao encontrado para este cliente",
+      "passou": true,
+      "obs": ""
+    },
+    {
+      "id": "T9",
+      "nome": "Opcional",
+      "esperado": "pedido aceito; banana 20 -> 19",
+      "obtido": "PEDIR|0|1|BANANA -> PEDIDO_CRIADO|2|AGUARDANDO|3; PEDIR|4|20|BANANA -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido; PEDIR|4|19|BANANA -> PEDIDO_CRIADO|3|AGUARDANDO|3",
+      "passou": true,
+      "obs": "estoque de banana não é visível no protocolo; 20 recusado e 19 aceito implica exatamente 19"
+    },
+    {
+      "id": "T10",
+      "nome": "Opcional inválido",
+      "esperado": "ERRO|OPCIONAL_INVALIDO|...",
+      "obtido": "ERRO|OPCIONAL_INVALIDO|Agua Geladinha nao aceita opcionais",
+      "passou": true,
+      "obs": ""
+    },
+    {
+      "id": "T11",
+      "nome": "Validações",
+      "esperado": "PRODUTO_INVALIDO, QUANTIDADE_INVALIDA, FORMATO_INVALIDO, COMANDO_INVALIDO",
+      "obtido": "PRODUTO_INVALIDO, QUANTIDADE_INVALIDA, FORMATO_INVALIDO, COMANDO_INVALIDO",
+      "passou": true,
+      "obs": ""
+    },
+    {
+      "id": "T13",
+      "nome": "Rede (simulada)",
+      "esperado": "cliente conecta pelo IP 192.0.2.2 e é atendido",
+      "obtido": "socket 192.0.2.2:51316 -> 192.0.2.2:5000; CONECTADO|Caio; catálogo com 7 itens",
+      "passou": true,
+      "obs": "simulação: mesma máquina, mas pela interface de rede 192.0.2.2 em vez de 127.0.0.1"
+    },
+    {
+      "id": "T14",
+      "nome": "Saída e queda",
+      "esperado": "nomes liberados após SAIR / queda; servidor continua atendendo",
+      "obtido": "Bia fechou após SAIR=True; reconexões: {'Ana': 'CONECTADO|Ana', 'Bia': 'CONECTADO|Bia', 'Dani': 'CONECTADO|Dani'}; catálogo depois: 7 itens (quantidades [10, 5, 25, 12, 6, 3, 20])",
+      "passou": true,
+      "obs": ""
+    },
+    {
+      "id": "T12",
+      "nome": "Concorrência",
+      "esperado": "em cada rodada, exatamente um PEDIDO_CRIADO e um SEM_ESTOQUE",
+      "obtido": "30/30 rodadas corretas (vencedor P1=8, P2=22)",
+      "passou": true,
+      "obs": ""
+    }
+  ],
+  "extra": {
+    "t2": [
+      [
+        "CONECTAR|ana",
+        "ERRO|NOME_EM_USO|Ja existe um cliente conectado com este nome"
+      ],
+      [
+        "CONECTAR|",
+        "ERRO|NAO_CONECTADO|Envie CONECTAR|nome antes dos comandos"
+      ],
+      [
+        "CONECTAR| ",
+        "ERRO|NOME_INVALIDO|Nome vazio ou com o caractere |"
+      ]
+    ],
+    "broadcast_nao_identificados": {
+      "Outro": true,
+      "Cru": true
+    },
+    "t7": {
+      "envio_ate_PEDIDO_CRIADO_ms": 1.6,
+      "envio_ate_EM_PREPARACAO_ms": 44.0,
+      "envio_ate_CONCLUIDO_ms": 5003.4,
+      "EM_PREPARACAO_ate_CONCLUIDO_ms": 4959.3
+    },
+    "servidor_stdout": [
+      "Servidor TCP rodando na porta: 5000",
+      "Conexao encerrada: Connection reset"
+    ]
+  },
+  "t12": [
+    {
+      "rodada": 1,
+      "porta": 5100,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 62
+    },
+    {
+      "rodada": 2,
+      "porta": 5101,
+      "P1": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "P2": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "ok": true,
+      "vencedor": "P1",
+      "defasagem_us": 38
+    },
+    {
+      "rodada": 3,
+      "porta": 5102,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 130
+    },
+    {
+      "rodada": 4,
+      "porta": 5103,
+      "P1": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "P2": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "ok": true,
+      "vencedor": "P1",
+      "defasagem_us": 30
+    },
+    {
+      "rodada": 5,
+      "porta": 5104,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 37
+    },
+    {
+      "rodada": 6,
+      "porta": 5105,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 26
+    },
+    {
+      "rodada": 7,
+      "porta": 5106,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 50
+    },
+    {
+      "rodada": 8,
+      "porta": 5107,
+      "P1": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "P2": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "ok": true,
+      "vencedor": "P1",
+      "defasagem_us": 32
+    },
+    {
+      "rodada": 9,
+      "porta": 5108,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 38
+    },
+    {
+      "rodada": 10,
+      "porta": 5109,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 89
+    },
+    {
+      "rodada": 11,
+      "porta": 5110,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 27
+    },
+    {
+      "rodada": 12,
+      "porta": 5111,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 31
+    },
+    {
+      "rodada": 13,
+      "porta": 5112,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 27
+    },
+    {
+      "rodada": 14,
+      "porta": 5113,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 91
+    },
+    {
+      "rodada": 15,
+      "porta": 5114,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 53
+    },
+    {
+      "rodada": 16,
+      "porta": 5115,
+      "P1": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "P2": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "ok": true,
+      "vencedor": "P1",
+      "defasagem_us": 24
+    },
+    {
+      "rodada": 17,
+      "porta": 5116,
+      "P1": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "P2": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "ok": true,
+      "vencedor": "P1",
+      "defasagem_us": 26
+    },
+    {
+      "rodada": 18,
+      "porta": 5117,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 100
+    },
+    {
+      "rodada": 19,
+      "porta": 5118,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 87
+    },
+    {
+      "rodada": 20,
+      "porta": 5119,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 49
+    },
+    {
+      "rodada": 21,
+      "porta": 5120,
+      "P1": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "P2": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "ok": true,
+      "vencedor": "P1",
+      "defasagem_us": 34
+    },
+    {
+      "rodada": 22,
+      "porta": 5121,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 88
+    },
+    {
+      "rodada": 23,
+      "porta": 5122,
+      "P1": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "P2": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "ok": true,
+      "vencedor": "P1",
+      "defasagem_us": 31
+    },
+    {
+      "rodada": 24,
+      "porta": 5123,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 121
+    },
+    {
+      "rodada": 25,
+      "porta": 5124,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 91
+    },
+    {
+      "rodada": 26,
+      "porta": 5125,
+      "P1": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "P2": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "ok": true,
+      "vencedor": "P1",
+      "defasagem_us": 74
+    },
+    {
+      "rodada": 27,
+      "porta": 5126,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 116
+    },
+    {
+      "rodada": 28,
+      "porta": 5127,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 94
+    },
+    {
+      "rodada": 29,
+      "porta": 5128,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 149
+    },
+    {
+      "rodada": 30,
+      "porta": 5129,
+      "P1": "ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido",
+      "P2": "PEDIDO_CRIADO|1|AGUARDANDO|5",
+      "ok": true,
+      "vencedor": "P2",
+      "defasagem_us": 41
+    }
+  ],
+  "ip": "192.0.2.2"
+}

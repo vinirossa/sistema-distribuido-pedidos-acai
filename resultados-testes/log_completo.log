@@ -1,0 +1,287 @@
+
+===== Execução iniciada em 2026-11-13 17:06:04 (ip não-loopback: 192.0.2.2) =====
+
+===== T1 Conexão =====
+           # iniciando: java -cp build multithreads2.TCPServerAtivosMain 5000
++    0.062s  [SERVIDOR]     :: Servidor TCP rodando na porta: 5000
+           # Ana conectou o socket 127.0.0.1:38454 -> 127.0.0.1:5000
++    0.065s  [Ana]          >> CONECTAR|Ana
++    0.069s  [Ana]          << CONECTADO|Ana
+           # Bia conectou o socket 127.0.0.1:38468 -> 127.0.0.1:5000
++    0.069s  [Bia]          >> CONECTAR|Bia
++    0.070s  [Bia]          << CONECTADO|Bia
+           # RESULTADO T1: PASSOU | obtido: CONECTADO|Ana / CONECTADO|Bia
+
+===== T2 Nome repetido e nome vazio =====
+           # Outro conectou o socket 127.0.0.1:38484 -> 127.0.0.1:5000
++    0.070s  [Outro]        >> CONECTAR|ana
++    0.071s  [Outro]        << ERRO|NOME_EM_USO|Ja existe um cliente conectado com este nome
++    0.071s  [Outro]        >> CONECTAR|
++    0.071s  [Outro]        << ERRO|NAO_CONECTADO|Envie CONECTAR|nome antes dos comandos
++    0.071s  [Outro]        >> CONECTAR| 
++    0.071s  [Outro]        << ERRO|NOME_INVALIDO|Nome vazio ou com o caractere |
+           # RESULTADO T2: FALHOU | obtido: CONECTAR|ana -> ERRO|NOME_EM_USO|Ja existe um cliente conectado com este nome; CONECTAR| -> ERRO|NAO_CONECTADO|Envie CONECTAR|nome antes dos comandos; CONECTAR|  -> ERRO|NOME_INVALIDO|Nome vazio ou com o caractere | | obs: CONECTAR| (vazio) não devolveu NOME_INVALIDO
+
+===== T3 Comando sem identificação =====
+           # Cru conectou o socket 127.0.0.1:38496 -> 127.0.0.1:5000
++    0.072s  [Cru]          >> CATALOGO
++    0.072s  [Cru]          << ERRO|NAO_CONECTADO|Envie CONECTAR|nome antes dos comandos
+           # RESULTADO T3: PASSOU | obtido: ERRO|NAO_CONECTADO|Envie CONECTAR|nome antes dos comandos
+
+===== T4 Catálogo =====
++    0.072s  [Ana]          >> CATALOGO
++    0.073s  [Ana]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|25
++    0.113s  [Ana]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|12
++    0.113s  [Ana]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    0.113s  [Ana]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    0.113s  [Ana]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    0.113s  [Ana]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    0.113s  [Ana]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    0.113s  [Ana]          << FIM_CATALOGO
+           # RESULTADO T4: PASSOU | obtido: 7 itens, disponivel=1111111, quantidades=[25, 12, 25, 12, 25, 12, 20], FIM_CATALOGO=True
+
+===== T5 Pedido aceito (+ T6 logo em seguida) =====
++    0.113s  [Ana]          >> PEDIR|1|7|NENHUM
++    0.114s  [Bia]          >> PEDIR|1|7|NENHUM
++    0.115s  [Ana]          << PEDIDO_CRIADO|1|AGUARDANDO|5
++    0.115s  [Bia]          << ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido
++    0.115s  [Bia]          << CATALOGO_ATUALIZADO
++    0.115s  [Bia]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|11
++    0.116s  [Bia]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    0.116s  [Bia]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    0.116s  [Bia]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    0.116s  [Bia]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    0.116s  [Bia]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    0.116s  [Bia]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    0.116s  [Bia]          << FIM_CATALOGO
++    0.116s  [Outro]        << CATALOGO_ATUALIZADO
++    0.116s  [Outro]        << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|11
++    0.116s  [Outro]        << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    0.116s  [Outro]        << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    0.116s  [Outro]        << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    0.116s  [Outro]        << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    0.116s  [Outro]        << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    0.116s  [Outro]        << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    0.116s  [Outro]        << FIM_CATALOGO
++    0.116s  [Cru]          << CATALOGO_ATUALIZADO
++    0.116s  [Cru]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|11
++    0.116s  [Cru]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    0.116s  [Cru]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    0.117s  [Cru]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    0.117s  [Cru]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    0.117s  [Cru]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    0.117s  [Cru]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    0.117s  [Cru]          << FIM_CATALOGO
++    0.157s  [Ana]          << CATALOGO_ATUALIZADO
++    0.157s  [Ana]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|11
++    0.157s  [Ana]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    0.157s  [Ana]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    0.157s  [Ana]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    0.157s  [Ana]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    0.157s  [Ana]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    0.157s  [Ana]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    0.157s  [Ana]          << FIM_CATALOGO
++    0.157s  [Ana]          << EVENTO_STATUS|1|EM_PREPARACAO
+           # RESULTADO T5: PASSOU | obtido: PEDIDO_CRIADO|1|AGUARDANDO|5; quantidades no CATALOGO_ATUALIZADO: Ana=[11, 5, 25, 12, 25, 12, 20], Bia=[11, 5, 25, 12, 25, 12, 20] | obs: ordem das primeiras mensagens da Ana após o pedido: PEDIDO_CRIADO, CATALOGO_ATUALIZADO, CATALOGO_ITEM
+           # RESULTADO T6: PASSOU | obtido: ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido (0 ms após o pedido da Ana)
+           # conexões sem CONECTAR que receberam CATALOGO_ATUALIZADO: Outro=True, Cru=True
+
+===== T7 Notificações assíncronas =====
++    5.117s  [Ana]          << EVENTO_STATUS|1|CONCLUIDO
+           # tempos T7: {'envio_ate_PEDIDO_CRIADO_ms': 1.6, 'envio_ate_EM_PREPARACAO_ms': 44.0, 'envio_ate_CONCLUIDO_ms': 5003.4, 'EM_PREPARACAO_ate_CONCLUIDO_ms': 4959.3}
+           # RESULTADO T7: PASSOU | obtido: EVENTO_STATUS|1|EM_PREPARACAO / EVENTO_STATUS|1|CONCLUIDO; intervalo 4.959 s
+
+===== T8 Consulta de status =====
++    5.117s  [Ana]          >> STATUS|1
++    5.118s  [Ana]          << STATUS_PEDIDO|1|CONCLUIDO|5
++    5.118s  [Bia]          >> STATUS|1
++    5.118s  [Bia]          << ERRO|PEDIDO_NAO_ENCONTRADO|Pedido nao encontrado para este cliente
+           # RESULTADO T8: PASSOU | obtido: Ana: STATUS_PEDIDO|1|CONCLUIDO|5; Bia: ERRO|PEDIDO_NAO_ENCONTRADO|Pedido nao encontrado para este cliente
+
+===== T9 Opcional BANANA =====
++    5.119s  [Bia]          >> PEDIR|0|1|BANANA
++    5.119s  [Bia]          << PEDIDO_CRIADO|2|AGUARDANDO|3
+           # o catálogo não expõe o estoque de banana; verificação indireta com o Açaí Zero (5000 ml intactos, então só a banana pode faltar):
++    5.119s  [Bia]          >> PEDIR|4|20|BANANA
++    5.119s  [Bia]          << EVENTO_STATUS|2|EM_PREPARACAO
++    5.119s  [Bia]          << CATALOGO_ATUALIZADO
++    5.120s  [Outro]        << CATALOGO_ATUALIZADO
++    5.120s  [Outro]        << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.120s  [Outro]        << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.120s  [Outro]        << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.120s  [Outro]        << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.120s  [Outro]        << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    5.120s  [Outro]        << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    5.120s  [Outro]        << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.120s  [Outro]        << FIM_CATALOGO
++    5.120s  [Cru]          << CATALOGO_ATUALIZADO
++    5.120s  [Cru]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.120s  [Cru]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.120s  [Cru]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.120s  [Cru]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.120s  [Cru]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    5.120s  [Cru]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    5.120s  [Cru]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.120s  [Cru]          << FIM_CATALOGO
++    5.161s  [Ana]          << CATALOGO_ATUALIZADO
++    5.161s  [Ana]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.161s  [Ana]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.161s  [Ana]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.161s  [Ana]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.161s  [Ana]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    5.161s  [Ana]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    5.161s  [Ana]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.161s  [Ana]          << FIM_CATALOGO
++    5.161s  [Bia]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.162s  [Bia]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.162s  [Bia]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.162s  [Bia]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.162s  [Bia]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    5.162s  [Bia]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    5.162s  [Bia]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.162s  [Bia]          << FIM_CATALOGO
++    5.162s  [Bia]          << ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido
++    5.162s  [Bia]          >> PEDIR|4|19|BANANA
++    5.162s  [Bia]          << PEDIDO_CRIADO|3|AGUARDANDO|3
+           # RESULTADO T9: PASSOU | obtido: PEDIR|0|1|BANANA -> PEDIDO_CRIADO|2|AGUARDANDO|3; PEDIR|4|20|BANANA -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido; PEDIR|4|19|BANANA -> PEDIDO_CRIADO|3|AGUARDANDO|3 | obs: estoque de banana não é visível no protocolo; 20 recusado e 19 aceito implica exatamente 19
+
+===== T10 Opcional inválido =====
++    5.163s  [Ana]          >> PEDIR|6|1|BIS
++    5.163s  [Outro]        << CATALOGO_ATUALIZADO
++    5.163s  [Outro]        << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.163s  [Outro]        << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.163s  [Outro]        << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.163s  [Outro]        << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.163s  [Outro]        << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|6
++    5.163s  [Outro]        << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|3
++    5.163s  [Outro]        << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.163s  [Outro]        << FIM_CATALOGO
++    5.164s  [Cru]          << CATALOGO_ATUALIZADO
++    5.164s  [Cru]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.164s  [Cru]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.164s  [Cru]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.164s  [Cru]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.164s  [Cru]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|6
++    5.164s  [Cru]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|3
++    5.164s  [Cru]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.164s  [Cru]          << FIM_CATALOGO
++    5.164s  [Ana]          << CATALOGO_ATUALIZADO
++    5.164s  [Ana]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.164s  [Ana]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.164s  [Ana]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.205s  [Ana]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.205s  [Ana]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|6
++    5.205s  [Ana]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|3
++    5.205s  [Ana]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.206s  [Ana]          << FIM_CATALOGO
++    5.206s  [Ana]          << ERRO|OPCIONAL_INVALIDO|Agua Geladinha nao aceita opcionais
++    5.205s  [Bia]          << CATALOGO_ATUALIZADO
++    5.206s  [Bia]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.206s  [Bia]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.206s  [Bia]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.206s  [Bia]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.206s  [Bia]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|6
++    5.206s  [Bia]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|3
++    5.206s  [Bia]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.206s  [Bia]          << FIM_CATALOGO
+           # RESULTADO T10: PASSOU | obtido: ERRO|OPCIONAL_INVALIDO|Agua Geladinha nao aceita opcionais
+
+===== T11 Validações =====
++    5.206s  [Ana]          >> PEDIR|9|1|NENHUM
++    5.206s  [Ana]          << ERRO|PRODUTO_INVALIDO|Produto nao encontrado
++    5.206s  [Ana]          >> PEDIR|0|0|NENHUM
++    5.207s  [Ana]          << ERRO|QUANTIDADE_INVALIDA|Quantidade deve ser maior que zero
++    5.207s  [Ana]          >> PEDIR|0|1
++    5.207s  [Ana]          << ERRO|FORMATO_INVALIDO|Use PEDIR|produtoId|quantidade|opcionais
++    5.207s  [Ana]          >> XYZ
++    5.208s  [Ana]          << ERRO|COMANDO_INVALIDO|Comando nao reconhecido
+           # RESULTADO T11: PASSOU | obtido: PRODUTO_INVALIDO, QUANTIDADE_INVALIDA, FORMATO_INVALIDO, COMANDO_INVALIDO
+
+===== T13 Rede (simulada pelo IP não-loopback do container) =====
++    5.208s  [Outro]        !! fim do fluxo (EOF): conexão encerrada
++    5.208s  [Cru]          !! fim do fluxo (EOF): conexão encerrada
+           # Caio(rede) conectou o socket 192.0.2.2:51316 -> 192.0.2.2:5000
++    5.209s  [Caio(rede)]   >> CONECTAR|Caio
++    5.209s  [Caio(rede)]   << CONECTADO|Caio
++    5.210s  [Caio(rede)]   >> CATALOGO
++    5.210s  [Caio(rede)]   << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.253s  [Caio(rede)]   << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.253s  [Caio(rede)]   << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.253s  [Caio(rede)]   << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.253s  [Caio(rede)]   << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|6
++    5.253s  [Caio(rede)]   << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|3
++    5.253s  [Caio(rede)]   << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.253s  [Caio(rede)]   << FIM_CATALOGO
+           # RESULTADO T13: PASSOU | obtido: socket 192.0.2.2:51316 -> 192.0.2.2:5000; CONECTADO|Caio; catálogo com 7 itens | obs: simulação: mesma máquina, mas pela interface de rede 192.0.2.2 em vez de 127.0.0.1
++    5.253s  [Caio(rede)]   >> SAIR
++    5.254s  [Caio(rede)]   !! fim do fluxo (EOF): conexão encerrada
+
+===== T14 Saída normal e queda abrupta =====
++    5.254s  [Bia]          >> SAIR
++    5.255s  [Bia]          !! fim do fluxo (EOF): conexão encerrada
+           # Bia: servidor fechou a conexão após SAIR = True
+           # Ana: socket fechado com SO_LINGER=0 (RST, sem SAIR)
++    5.255s  [Ana]          !! fim do fluxo (EOF): conexão encerrada
+           # Dani: TCPClientConsole (Java) iniciado e morto com kill -9
++    5.257s  [SERVIDOR]     :: Conexao encerrada: Connection reset
++    5.325s  [Dani(console)] << Digite CATALOGO, PEDIR|produtoId|quantidade|opcionais, STATUS|pedidoId ou SAIR.
++    5.325s  [Dani(console)] << Servidor> CONECTADO|Dani
+           # Dani: processo terminou com código -9
+           # Ana#2 conectou o socket 127.0.0.1:35032 -> 127.0.0.1:5000
++    7.561s  [Ana#2]        >> CONECTAR|Ana
++    7.562s  [Ana#2]        << CONECTADO|Ana
+           # Bia#2 conectou o socket 127.0.0.1:35046 -> 127.0.0.1:5000
++    7.562s  [Bia#2]        >> CONECTAR|Bia
++    7.563s  [Bia#2]        << CONECTADO|Bia
+           # Dani#2 conectou o socket 127.0.0.1:35062 -> 127.0.0.1:5000
++    7.564s  [Dani#2]       >> CONECTAR|Dani
++    7.565s  [Dani#2]       << CONECTADO|Dani
++    7.565s  [Ana#2]        >> CATALOGO
++    7.565s  [Ana#2]        << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    7.612s  [Ana#2]        << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    7.612s  [Ana#2]        << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    7.612s  [Ana#2]        << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    7.612s  [Ana#2]        << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|6
++    7.612s  [Ana#2]        << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|3
++    7.612s  [Ana#2]        << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    7.612s  [Ana#2]        << FIM_CATALOGO
+           # RESULTADO T14: PASSOU | obtido: Bia fechou após SAIR=True; reconexões: {'Ana': 'CONECTADO|Ana', 'Bia': 'CONECTADO|Bia', 'Dani': 'CONECTADO|Dani'}; catálogo depois: 7 itens (quantidades [10, 5, 25, 12, 6, 3, 20])
++    7.612s  [Ana#2]        >> SAIR
++    7.613s  [Ana#2]        !! fim do fluxo (EOF): conexão encerrada
++    7.613s  [Bia#2]        >> SAIR
++    7.614s  [Bia#2]        !! fim do fluxo (EOF): conexão encerrada
++    7.614s  [Dani#2]       >> SAIR
++    7.614s  [Dani#2]       !! fim do fluxo (EOF): conexão encerrada
+
+===== T12 Concorrência: PEDIR|3|7|NENHUM simultâneo (barreira), servidor reiniciado a cada rodada =====
+           # rodada  1 porta 5100: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     62 us  OK
+           # rodada  2 porta 5101: P1 -> PEDIDO_CRIADO|1|AGUARDANDO|5             P2 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido defasagem envio     38 us  OK
+           # rodada  3 porta 5102: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio    130 us  OK
+           # rodada  4 porta 5103: P1 -> PEDIDO_CRIADO|1|AGUARDANDO|5             P2 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido defasagem envio     30 us  OK
+           # rodada  5 porta 5104: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     37 us  OK
+           # rodada  6 porta 5105: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     26 us  OK
+           # rodada  7 porta 5106: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     50 us  OK
+           # rodada  8 porta 5107: P1 -> PEDIDO_CRIADO|1|AGUARDANDO|5             P2 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido defasagem envio     32 us  OK
+           # rodada  9 porta 5108: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     38 us  OK
+           # rodada 10 porta 5109: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     89 us  OK
+           # rodada 11 porta 5110: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     27 us  OK
+           # rodada 12 porta 5111: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     31 us  OK
+           # rodada 13 porta 5112: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     27 us  OK
+           # rodada 14 porta 5113: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     91 us  OK
+           # rodada 15 porta 5114: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     53 us  OK
+           # rodada 16 porta 5115: P1 -> PEDIDO_CRIADO|1|AGUARDANDO|5             P2 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido defasagem envio     24 us  OK
+           # rodada 17 porta 5116: P1 -> PEDIDO_CRIADO|1|AGUARDANDO|5             P2 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido defasagem envio     26 us  OK
+           # rodada 18 porta 5117: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio    100 us  OK
+           # rodada 19 porta 5118: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     87 us  OK
+           # rodada 20 porta 5119: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     49 us  OK
+           # rodada 21 porta 5120: P1 -> PEDIDO_CRIADO|1|AGUARDANDO|5             P2 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido defasagem envio     34 us  OK
+           # rodada 22 porta 5121: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     88 us  OK
+           # rodada 23 porta 5122: P1 -> PEDIDO_CRIADO|1|AGUARDANDO|5             P2 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido defasagem envio     31 us  OK
+           # rodada 24 porta 5123: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio    121 us  OK
+           # rodada 25 porta 5124: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     91 us  OK
+           # rodada 26 porta 5125: P1 -> PEDIDO_CRIADO|1|AGUARDANDO|5             P2 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido defasagem envio     74 us  OK
+           # rodada 27 porta 5126: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio    116 us  OK
+           # rodada 28 porta 5127: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     94 us  OK
+           # rodada 29 porta 5128: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio    149 us  OK
+           # rodada 30 porta 5129: P1 -> ERRO|SEM_ESTOQUE|Estoque insuficiente para este pedido P2 -> PEDIDO_CRIADO|1|AGUARDANDO|5             defasagem envio     41 us  OK
+           # RESULTADO T12: PASSOU | obtido: 30/30 rodadas corretas (vencedor P1=8, P2=22)

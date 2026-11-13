@@ -1,0 +1,96 @@
+
+===== Execução iniciada em 2026-11-13 17:06:04 (ip não-loopback: 192.0.2.2) =====
+
+===== T1 Conexão =====
++    0.065s  [Ana]          >> CONECTAR|Ana
++    0.069s  [Ana]          << CONECTADO|Ana
+
+===== T2 Nome repetido e nome vazio =====
+
+===== T3 Comando sem identificação =====
+
+===== T4 Catálogo =====
++    0.072s  [Ana]          >> CATALOGO
++    0.073s  [Ana]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|25
++    0.113s  [Ana]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|12
++    0.113s  [Ana]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    0.113s  [Ana]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    0.113s  [Ana]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    0.113s  [Ana]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    0.113s  [Ana]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    0.113s  [Ana]          << FIM_CATALOGO
+
+===== T5 Pedido aceito (+ T6 logo em seguida) =====
++    0.113s  [Ana]          >> PEDIR|1|7|NENHUM
++    0.115s  [Ana]          << PEDIDO_CRIADO|1|AGUARDANDO|5
++    0.157s  [Ana]          << CATALOGO_ATUALIZADO
++    0.157s  [Ana]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|11
++    0.157s  [Ana]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    0.157s  [Ana]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    0.157s  [Ana]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    0.157s  [Ana]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    0.157s  [Ana]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    0.157s  [Ana]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    0.157s  [Ana]          << FIM_CATALOGO
++    0.157s  [Ana]          << EVENTO_STATUS|1|EM_PREPARACAO
+
+===== T7 Notificações assíncronas =====
++    5.117s  [Ana]          << EVENTO_STATUS|1|CONCLUIDO
+
+===== T8 Consulta de status =====
++    5.117s  [Ana]          >> STATUS|1
++    5.118s  [Ana]          << STATUS_PEDIDO|1|CONCLUIDO|5
+
+===== T9 Opcional BANANA =====
++    5.161s  [Ana]          << CATALOGO_ATUALIZADO
++    5.161s  [Ana]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.161s  [Ana]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.161s  [Ana]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.161s  [Ana]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.161s  [Ana]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|25
++    5.161s  [Ana]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|12
++    5.161s  [Ana]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.161s  [Ana]          << FIM_CATALOGO
+
+===== T10 Opcional inválido =====
++    5.163s  [Ana]          >> PEDIR|6|1|BIS
++    5.164s  [Ana]          << CATALOGO_ATUALIZADO
++    5.164s  [Ana]          << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    5.164s  [Ana]          << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    5.164s  [Ana]          << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    5.205s  [Ana]          << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    5.205s  [Ana]          << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|6
++    5.205s  [Ana]          << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|3
++    5.205s  [Ana]          << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    5.206s  [Ana]          << FIM_CATALOGO
++    5.206s  [Ana]          << ERRO|OPCIONAL_INVALIDO|Agua Geladinha nao aceita opcionais
+
+===== T11 Validações =====
++    5.206s  [Ana]          >> PEDIR|9|1|NENHUM
++    5.206s  [Ana]          << ERRO|PRODUTO_INVALIDO|Produto nao encontrado
++    5.206s  [Ana]          >> PEDIR|0|0|NENHUM
++    5.207s  [Ana]          << ERRO|QUANTIDADE_INVALIDA|Quantidade deve ser maior que zero
++    5.207s  [Ana]          >> PEDIR|0|1
++    5.207s  [Ana]          << ERRO|FORMATO_INVALIDO|Use PEDIR|produtoId|quantidade|opcionais
++    5.207s  [Ana]          >> XYZ
++    5.208s  [Ana]          << ERRO|COMANDO_INVALIDO|Comando nao reconhecido
+
+===== T13 Rede (simulada pelo IP não-loopback do container) =====
+
+===== T14 Saída normal e queda abrupta =====
++    5.255s  [Ana]          !! fim do fluxo (EOF): conexão encerrada
++    7.561s  [Ana#2]        >> CONECTAR|Ana
++    7.562s  [Ana#2]        << CONECTADO|Ana
++    7.565s  [Ana#2]        >> CATALOGO
++    7.565s  [Ana#2]        << CATALOGO_ITEM|0|Acai Natural 200ml|10.00|1|10
++    7.612s  [Ana#2]        << CATALOGO_ITEM|1|Acai Natural 400ml|20.00|1|5
++    7.612s  [Ana#2]        << CATALOGO_ITEM|2|Acai com Guarana 200ml|12.00|1|25
++    7.612s  [Ana#2]        << CATALOGO_ITEM|3|Acai com Guarana 400ml|24.00|1|12
++    7.612s  [Ana#2]        << CATALOGO_ITEM|4|Acai Zero Acucar 200ml|14.00|1|6
++    7.612s  [Ana#2]        << CATALOGO_ITEM|5|Acai Zero Acucar 400ml|28.00|1|3
++    7.612s  [Ana#2]        << CATALOGO_ITEM|6|Agua Geladinha|3.00|1|20
++    7.612s  [Ana#2]        << FIM_CATALOGO
++    7.612s  [Ana#2]        >> SAIR
++    7.613s  [Ana#2]        !! fim do fluxo (EOF): conexão encerrada
+
+===== T12 Concorrência: PEDIR|3|7|NENHUM simultâneo (barreira), servidor reiniciado a cada rodada =====
